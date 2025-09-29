@@ -88,5 +88,5 @@ const generatePhotos = () => {
 };
 
 window.generatedPhotos = generatePhotos();
-const photos = generatePhotos();
-export {photos};
+const exportPhotos = generatePhotos();
+export {exportPhotos};
