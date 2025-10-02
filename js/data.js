@@ -1,6 +1,4 @@
-import {getRandomElement} from './util.js';
-
-import {getRandomInteger} from './util.js';
+import {getRandomElement, getRandomInteger} from './util.js';
 
 const NAMES = [
   'Артём',
@@ -87,6 +85,5 @@ const generatePhotos = () => {
   return photos;
 };
 
-window.generatedPhotos = generatePhotos();
 const exportPhotos = generatePhotos();
 export {exportPhotos};
