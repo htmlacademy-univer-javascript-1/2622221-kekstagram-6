@@ -20,11 +20,11 @@ const renderThumbnails = () => {
   const picturesContainer = document.querySelector('.pictures');
   const photos = generatePhotosArray();
   const fragment = document.createDocumentFragment();
-  photos.forEach(photo => {
+  photos.forEach((photo) => {
     const thumbnailElement = createThumbnailElement(photo);
     fragment.appendChild(thumbnailElement);
   });
-  picturesContainer.innerHTML = "";
+  picturesContainer.innerHTML = '';
   picturesContainer.appendChild(fragment);
 };
 
