@@ -4,4 +4,4 @@ import { renderThumbnails } from './thumbnail.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   renderThumbnails();
-})
+});
