@@ -34,4 +34,8 @@ const checkTime = function(timeStart, timeEnd, meetStart, meetTime) {
   return false;
 };
 
-export { checkTime };
+window.myFunctions = {
+  checkString,
+  checkPalindrome,
+  checkTime
+};

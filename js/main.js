@@ -1,3 +1,3 @@
-import './thumbnail.js';
-import './util.js';
-import './data.js';
+
+const photos = window.generatePhotosArray;
+window.renderThumbnails(photos);
