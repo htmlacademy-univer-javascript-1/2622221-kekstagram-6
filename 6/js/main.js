@@ -1,8 +1,3 @@
-import './util.js';
-import './data.js';
-import {renderThumbnails} from './thumbnail.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-  renderThumbnails();
-});
-
+const photos = window.generatePhotosArray;
+window.renderThumbnails(photos);
