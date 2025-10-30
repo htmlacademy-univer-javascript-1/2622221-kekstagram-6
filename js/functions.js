@@ -1,19 +1,21 @@
 // eslint-disable-next-line no-unused-vars
-const checkString = function  (line, lineLenght) {
-  if (line.length()<=lineLenght) {return true;}
+const checkString = function(line, lineLength) {
+  if (line.length <= lineLength) { return true; }
   return false;
 };
+
 // eslint-disable-next-line no-unused-vars
-const checkPalindrome = function (line) {
-  const newLine = line.toLowerCase().replaceAll();
-  let finalLine;
-  for (let i = newLine.length(); i > 0; i--) {
-    finalLine+=newLine[i];
+const checkPalindrome = function(line) {
+  const newLine = line.toLowerCase().replaceAll(' ', '');
+  let finalLine = '';
+  for (let i = newLine.length - 1; i >= 0; i--) {
+    finalLine += newLine[i];
   }
-  if (finalLine===newLine) {return true;}
+  if (finalLine === newLine) { return true; }
   return false;
 };
-const checkTime = function (timeStart, timeEnd, meetStart, meetTime) {
+
+const checkTime = function(timeStart, timeEnd, meetStart, meetTime) {
   const timeToMinutes = function(time) {
     const parts = time.split(':');
     const hours = parseInt(parts[0], 10);
@@ -30,4 +32,10 @@ const checkTime = function (timeStart, timeEnd, meetStart, meetTime) {
     return true;
   }
   return false;
+};
+
+window.myFunctions = {
+  checkString,
+  checkPalindrome,
+  checkTime
 };
