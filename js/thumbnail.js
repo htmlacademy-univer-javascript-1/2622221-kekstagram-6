@@ -18,10 +18,11 @@ const renderThumbnails = (photos) => {
   const fragment = document.createDocumentFragment();
 
   photos.forEach((photo) => {
-    fragment.appendChild(createThumbnailElement(photo));
+    const thumbnailElement = createThumbnailElement(photo);
+    fragment.appendChild(thumbnailElement);
   });
 
   picturesContainer.appendChild(fragment);
 };
 
-window.renderThumbnails = renderThumbnails;
+export { renderThumbnails };

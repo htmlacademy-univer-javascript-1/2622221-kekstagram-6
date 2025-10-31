@@ -1,8 +1,9 @@
 
-const getRandomElement = (array) => array[Math.floor(Math.random() * array.length)];
+const getRandomElement = (array) => {
+  const randomIndex = Math.floor(Math.random() * array.length);
+  return array[randomIndex];
+};
 
 const getRandomInteger = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-// Сделать функции глобальными
-window.getRandomElement = getRandomElement;
-window.getRandomInteger = getRandomInteger;
+export { getRandomElement, getRandomInteger };
