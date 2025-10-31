@@ -1,41 +1,37 @@
-// eslint-disable-next-line no-unused-vars
-const checkString = function(line, lineLength) {
-  if (line.length <= lineLength) { return true; }
-  return false;
+
+const checkStringLength = function (line, maxLength) {
+  return line.length <= maxLength;
 };
 
-// eslint-disable-next-line no-unused-vars
-const checkPalindrome = function(line) {
-  const newLine = line.toLowerCase().replaceAll(' ', '');
-  let finalLine = '';
-  for (let i = newLine.length - 1; i >= 0; i--) {
-    finalLine += newLine[i];
+const checkPalindrome = function (line) {
+  const normalizedLine = line.toLowerCase().replaceAll(' ', '');
+  let reversedLine = '';
+
+  for (let i = normalizedLine.length - 1; i >= 0; i--) {
+    reversedLine += normalizedLine[i];
   }
-  if (finalLine === newLine) { return true; }
-  return false;
+
+  return reversedLine === normalizedLine;
 };
 
-const checkTime = function(timeStart, timeEnd, meetStart, meetTime) {
-  const timeToMinutes = function(time) {
+const checkMeetingTime = function (timeStart, timeEnd, meetStart, meetDuration) {
+  const convertTimeToMinutes = function (time) {
     const parts = time.split(':');
     const hours = parseInt(parts[0], 10);
     const minutes = parseInt(parts[1] || 0, 10);
     return hours * 60 + minutes;
   };
-  const dayStart = timeToMinutes(timeStart);
-  const dayEnd = timeToMinutes(timeEnd);
-  const meetingStart = timeToMinutes(meetStart);
-  const meetingDuration = meetTime;
-  const meetingEnd = meetingStart + meetingDuration;
 
-  if (meetingStart >= dayStart && meetingEnd <= dayEnd) {
-    return true;
-  }
-  return false;
+  const dayStartMinutes = convertTimeToMinutes(timeStart);
+  const dayEndMinutes = convertTimeToMinutes(timeEnd);
+  const meetingStartMinutes = convertTimeToMinutes(meetStart);
+  const meetingEndMinutes = meetingStartMinutes + meetDuration;
+
+  return meetingStartMinutes >= dayStartMinutes && meetingEndMinutes <= dayEndMinutes;
 };
 
-window.myFunctions = {
-  checkString,
+export {
+  checkStringLength,
   checkPalindrome,
-  checkTime
+  checkMeetingTime
 };
