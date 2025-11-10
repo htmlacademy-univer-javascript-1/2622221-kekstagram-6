@@ -1,3 +1,4 @@
+import { getRandomElement, getRandomInteger } from './util.js';
 
 const NAMES = [
   'Артём',
@@ -37,8 +38,7 @@ const DESCRIPTIONS = [
 const generateUniqueIds = (count) => {
   const ids = new Set();
   while (ids.size < count) {
-    // Используем глобальные функции из util.js
-    ids.add(window.getRandomInteger(1, 1000));
+    ids.add(getRandomInteger(1, 1000));
   }
   return Array.from(ids);
 };
@@ -48,18 +48,18 @@ const generateComments = (count) => {
   const comments = [];
 
   for (let i = 0; i < count; i++) {
-    const messageCount = window.getRandomInteger(1, 2);
+    const messageCount = getRandomInteger(1, 2);
     const selectedMessages = [];
 
     for (let j = 0; j < messageCount; j++) {
-      selectedMessages.push(window.getRandomElement(MESSAGES));
+      selectedMessages.push(getRandomElement(MESSAGES));
     }
 
     comments.push({
       id: commentIds[i],
-      avatar: `img/avatar-${window.getRandomInteger(1, 6)}.svg`,
+      avatar: `img/avatar-${getRandomInteger(1, 6)}.svg`,
       message: selectedMessages.join(' '),
-      name: window.getRandomElement(NAMES)
+      name: getRandomElement(NAMES)
     });
   }
 
@@ -70,13 +70,13 @@ const generatePhotos = () => {
   const photos = [];
 
   for (let i = 1; i <= 25; i++) {
-    const commentsCount = window.getRandomInteger(0, 30);
+    const commentsCount = getRandomInteger(0, 30);
 
     photos.push({
       id: i,
       url: `photos/${i}.jpg`,
-      description: window.getRandomElement(DESCRIPTIONS),
-      likes: window.getRandomInteger(15, 200),
+      description: getRandomElement(DESCRIPTIONS),
+      likes: getRandomInteger(15, 200),
       comments: generateComments(commentsCount)
     });
   }
@@ -85,4 +85,4 @@ const generatePhotos = () => {
 };
 
 const generatePhotosArray = generatePhotos();
-window.generatePhotosArray = generatePhotosArray;
+export { generatePhotosArray };

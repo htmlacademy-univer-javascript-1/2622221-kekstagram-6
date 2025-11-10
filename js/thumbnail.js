@@ -1,3 +1,4 @@
+import { openBigPicture } from './big-picture.js';
 
 const createThumbnailElement = (photoData) => {
   const template = document.querySelector('#picture');
@@ -9,6 +10,11 @@ const createThumbnailElement = (photoData) => {
   thumbnail.querySelector('.picture__likes').textContent = photoData.likes;
   thumbnail.querySelector('.picture__comments').textContent = photoData.comments.length;
   thumbnail.dataset.thumbnailId = photoData.id;
+
+  thumbnail.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    openBigPicture(photoData);
+  });
 
   return thumbnail;
 };
@@ -24,4 +30,4 @@ const renderThumbnails = (photos) => {
   picturesContainer.appendChild(fragment);
 };
 
-window.renderThumbnails = renderThumbnails;
+export { renderThumbnails };
