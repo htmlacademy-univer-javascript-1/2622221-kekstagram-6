@@ -1,5 +1,7 @@
 import { getRandomElement, getRandomInteger } from './util.js';
 
+import { getRandomElement, getRandomInteger } from './util.js';
+
 const NAMES = [
   'Артём',
   'Мария',

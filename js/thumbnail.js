@@ -1,5 +1,7 @@
 import { openBigPicture } from './big-picture.js';
 
+import { openBigPicture } from './big-picture.js';
+
 const createThumbnailElement = (photoData) => {
   const template = document.querySelector('#picture');
   const thumbnail = template.content.querySelector('.picture').cloneNode(true);

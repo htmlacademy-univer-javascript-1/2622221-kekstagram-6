@@ -1,90 +1,33 @@
 
-const COMMENTS_PER_STEP = 5;
-
-const bigPictureElement = document.querySelector('.big-picture');
-const closeButtonElement = bigPictureElement.querySelector('.big-picture__cancel');
-const commentsCountElement = bigPictureElement.querySelector('.social__comment-count');
-const commentsLoaderElement = bigPictureElement.querySelector('.comments-loader');
-const commentsListElement = bigPictureElement.querySelector('.social__comments');
-
-let currentComments = [];
-let commentsShown = 0;
-
-const createCommentElement = (comment) => {
-  const commentElement = document.createElement('li');
-  commentElement.classList.add('social__comment');
-
-  const pictureElement = document.createElement('img');
-  pictureElement.classList.add('social__picture');
-  pictureElement.src = comment.avatar;
-  pictureElement.alt = comment.name;
-  pictureElement.width = 35;
-  pictureElement.height = 35;
-
-  const textElement = document.createElement('p');
-  textElement.classList.add('social__text');
-  textElement.textContent = comment.message;
-
-  commentElement.appendChild(pictureElement);
-  commentElement.appendChild(textElement);
-
-  return commentElement;
-};
-
-const renderComments = () => {
-  const commentsToShow = Math.min(commentsShown + COMMENTS_PER_STEP, currentComments.length);
-
-  if (commentsShown === 0) {
-    commentsListElement.innerHTML = '';
-  }
-
-  const fragment = document.createDocumentFragment();
-  for (let i = commentsShown; i < commentsToShow; i++) {
-    const commentElement = createCommentElement(currentComments[i]);
-    fragment.appendChild(commentElement);
-  }
-
-  commentsListElement.appendChild(fragment);
-
-  const commentsCountText = `${commentsToShow} из <span class="comments-count">${currentComments.length}</span> комментариев`;
-  commentsCountElement.innerHTML = commentsCountText;
-
-  if (commentsToShow >= currentComments.length) {
-    commentsLoaderElement.classList.add('hidden');
-  } else {
-    commentsLoaderElement.classList.remove('hidden');
-  }
-
-  commentsShown = commentsToShow;
-};
-
-const onCommentsLoaderClick = () => {
-  renderComments();
-};
-
-const resetComments = () => {
-  commentsShown = 0;
-  currentComments = [];
-  commentsLoaderElement.removeEventListener('click', onCommentsLoaderClick);
-};
+const bigPicture = document.querySelector('.big-picture');
+const closeButton = bigPicture.querySelector('.big-picture__cancel');
 
 const openBigPicture = (photoData) => {
-  resetComments();
+  //заполняем данные
+  bigPicture.querySelector('.big-picture__img img').src = photoData.url;
+  bigPicture.querySelector('.likes-count').textContent = photoData.likes;
+  bigPicture.querySelector('.comments-count').textContent = photoData.comments.length;
+  bigPicture.querySelector('.social__caption').textContent = photoData.description;
 
-  bigPictureElement.querySelector('.big-picture__img img').src = photoData.url;
-  bigPictureElement.querySelector('.likes-count').textContent = photoData.likes;
-  bigPictureElement.querySelector('.comments-count').textContent = photoData.comments.length;
-  bigPictureElement.querySelector('.social__caption').textContent = photoData.description;
+  //скрываем элементы
+  bigPicture.querySelector('.social__comment-count').classList.add('hidden');
+  bigPicture.querySelector('.comments-loader').classList.add('hidden');
 
-  commentsCountElement.classList.remove('hidden');
-  commentsLoaderElement.classList.remove('hidden');
+  //добавляем комментарии
+  const commentsList = bigPicture.querySelector('.social__comments');
+  commentsList.innerHTML = '';
+  photoData.comments.forEach((comment) => {
+    const commentElement = document.createElement('li');
+    commentElement.classList.add('social__comment');
+    commentElement.innerHTML = `
+      <img class="social__picture" src="${comment.avatar}" alt="${comment.name}" width="35" height="35">
+      <p class="social__text">${comment.message}</p>
+    `;
+    commentsList.appendChild(commentElement);
+  });
 
-  currentComments = photoData.comments;
-  renderComments();
-
-  commentsLoaderElement.addEventListener('click', onCommentsLoaderClick);
-
-  bigPictureElement.classList.remove('hidden');
+  //показываем окна
+  bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
 };
 
