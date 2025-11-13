@@ -1,3 +1,4 @@
+
 import { openBigPicture } from './big-picture.js';
 
 const createThumbnailElement = (photoData) => {
