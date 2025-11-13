@@ -12,7 +12,6 @@ const createThumbnailElement = (photoData) => {
   thumbnail.querySelector('.picture__comments').textContent = photoData.comments.length;
   thumbnail.dataset.thumbnailId = photoData.id;
 
-  //добавляем обработчик клика для открытия большого фото
   thumbnail.addEventListener('click', (evt) => {
     evt.preventDefault();
     openBigPicture(photoData);
