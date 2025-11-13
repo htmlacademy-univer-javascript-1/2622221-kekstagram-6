@@ -1,4 +1,3 @@
-import { openBigPicture } from './big-picture.js';
 
 import { openBigPicture } from './big-picture.js';
 

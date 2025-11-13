@@ -1,21 +1,21 @@
-
 const bigPicture = document.querySelector('.big-picture');
 const closeButton = bigPicture.querySelector('.big-picture__cancel');
 
 const openBigPicture = (photoData) => {
-  //заполняем данные
+  // Заполняем данные
   bigPicture.querySelector('.big-picture__img img').src = photoData.url;
   bigPicture.querySelector('.likes-count').textContent = photoData.likes;
   bigPicture.querySelector('.comments-count').textContent = photoData.comments.length;
   bigPicture.querySelector('.social__caption').textContent = photoData.description;
 
-  //скрываем элементы
+  // Скрываем элементы
   bigPicture.querySelector('.social__comment-count').classList.add('hidden');
   bigPicture.querySelector('.comments-loader').classList.add('hidden');
 
-  //добавляем комментарии
+  // Добавляем комментарии
   const commentsList = bigPicture.querySelector('.social__comments');
   commentsList.innerHTML = '';
+
   photoData.comments.forEach((comment) => {
     const commentElement = document.createElement('li');
     commentElement.classList.add('social__comment');
@@ -26,15 +26,14 @@ const openBigPicture = (photoData) => {
     commentsList.appendChild(commentElement);
   });
 
-  //показываем окна
+  // Показываем окно
   bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
 };
 
 const closeBigPicture = () => {
-  bigPictureElement.classList.add('hidden');
+  bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  resetComments();
 };
 
 const onDocumentKeydown = (evt) => {
@@ -43,7 +42,7 @@ const onDocumentKeydown = (evt) => {
   }
 };
 
-closeButtonElement.addEventListener('click', closeBigPicture);
+closeButton.addEventListener('click', closeBigPicture);
 document.addEventListener('keydown', onDocumentKeydown);
 
 export { openBigPicture };
