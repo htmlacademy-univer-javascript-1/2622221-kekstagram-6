@@ -21,14 +21,14 @@ const createThumbnailElement = (photoData) => {
 };
 
 const renderThumbnails = (photos) => {
-  const picturesContainer = document.querySelector('.pictures');
+  const container = document.querySelector('.pictures');
   const fragment = document.createDocumentFragment();
 
   photos.forEach((photo) => {
     fragment.appendChild(createThumbnailElement(photo));
   });
 
-  picturesContainer.appendChild(fragment);
+  container.appendChild(fragment);
 };
 
 export { renderThumbnails };

@@ -68,12 +68,12 @@ const generateComments = (count) => {
 };
 
 const generatePhotos = () => {
-  const photos = [];
+  const photosArray = [];
 
   for (let i = 1; i <= 25; i++) {
     const commentsCount = getRandomInteger(0, 30);
 
-    photos.push({
+    photosArray.push({
       id: i,
       url: `photos/${i}.jpg`,
       description: getRandomElement(DESCRIPTIONS),
@@ -82,8 +82,8 @@ const generatePhotos = () => {
     });
   }
 
-  return photos;
+  return photosArray;
 };
 
-const generatePhotosArray = generatePhotos();
-export { generatePhotosArray };
+const photos = generatePhotos();
+export { photos };
