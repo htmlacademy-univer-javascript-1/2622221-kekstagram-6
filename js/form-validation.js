@@ -30,6 +30,29 @@ function initForm() {
   let currentEffect = 'none';
   let slider = null;
 
+  // ——— ПРЕВЬЮ ИЗОБРАЖЕНИЯ ———
+  const onFileSelect = () => {
+    const file = uploadInput.files[0];
+    if (!file) {return;}
+
+    imgUploadPreview.src = '';
+    imgUploadPreview.alt = '';
+
+    const reader = new FileReader();
+    reader.addEventListener('load', () => {
+    // Убеждаемся, что элемент всё ещё в DOM (защита от быстрого закрытия)
+      if (!imgUploadPreview.isConnected) {return;}
+
+      imgUploadPreview.src = reader.result;
+      imgUploadPreview.alt = file.name || 'Загруженное изображение';
+
+      openForm(); // ← открытие ТОЛЬКО после загрузки
+    });
+    reader.readAsDataURL(file);
+  };
+
+  uploadInput.addEventListener('change', onFileSelect);
+
   /* ---------- валидация ---------- */
 
   // инициализация pristine для валидации формы
@@ -310,9 +333,6 @@ function initForm() {
   }
 
   /* ---------- обработчики ---------- */
-
-  // открытие формы при выборе файла
-  uploadInput.addEventListener('change', openForm);
 
   // закрытие формы по кнопке отмены
   uploadCancel.addEventListener('click', closeForm);
