@@ -1,3 +1,4 @@
+// main.js
 import { loadPhotos } from './api.js';
 import { renderThumbnails } from './thumbnail.js';
 import { initFilters } from './filters.js';
