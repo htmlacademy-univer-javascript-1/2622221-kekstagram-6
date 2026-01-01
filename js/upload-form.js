@@ -1,6 +1,15 @@
-/* eslint-disable no-use-before-define */
 import { isEscapeKey } from './util.js';
 import { sendPhoto } from './api.js';
+import { showMessage } from './message.js';
+
+// ——— КОНСТАНТЫ ———
+const MAX_HASHTAGS = 5;
+const MIN_HASHTAG_LENGTH = 1;
+const MAX_HASHTAG_LENGTH = 20;
+const MAX_COMMENT_LENGTH = 140;
+const SCALE_STEP = 25;
+const MIN_SCALE = 25;
+const MAX_SCALE = 100;
 
 function initForm() {
   const form = document.querySelector('.img-upload__form');
@@ -26,22 +35,22 @@ function initForm() {
   const effectLevelSlider = document.querySelector('.effect-level__slider');
   const effectLevelValue = document.querySelector('.effect-level__value');
 
-  let currentScale = 100;
+  let currentScale = MAX_SCALE;
   let currentEffect = 'none';
   let slider = null;
 
   // ——— ПРЕВЬЮ ИЗОБРАЖЕНИЯ ———
   const onFileSelect = () => {
     const file = uploadInput.files[0];
-    if (!file) {return;}
+    if (!file) { return; }
 
     imgUploadPreview.src = '';
     imgUploadPreview.alt = '';
 
     const reader = new FileReader();
     reader.addEventListener('load', () => {
-    // Убеждаемся, что элемент всё ещё в DOM (защита от быстрого закрытия)
-      if (!imgUploadPreview.isConnected) {return;}
+      // убеждаемся, что элемент всё ещё в DOM (защита от быстрого закрытия)
+      if (!imgUploadPreview.isConnected) { return; }
 
       imgUploadPreview.src = reader.result;
       imgUploadPreview.alt = file.name || 'Загруженное изображение';
@@ -73,8 +82,8 @@ function initForm() {
     // разбиваем на отдельные теги, убираем пустые
     const hashtags = value.split(' ').filter(Boolean);
 
-    // не более 5 хэштегов
-    if (hashtags.length > 5) {
+    // не более MAX_HASHTAGS хэштегов
+    if (hashtags.length > MAX_HASHTAGS) {
       return false;
     }
 
@@ -86,7 +95,7 @@ function initForm() {
 
     // каждый хэштег должен соответствовать регулярному выражению
     return hashtags.every((tag) =>
-      /^#[a-zA-Zа-яА-ЯёЁ0-9]{1,19}$/.test(tag)
+      new RegExp(`^#[a-zA-Zа-яА-ЯёЁ0-9]{${MIN_HASHTAG_LENGTH},${MAX_HASHTAG_LENGTH - 1}}$`).test(tag)
     );
   }
 
@@ -94,7 +103,7 @@ function initForm() {
   function getHashtagErrorMessage(value) {
     const hashtags = value.split(' ').filter(Boolean);
 
-    if (hashtags.length > 5) {
+    if (hashtags.length > MAX_HASHTAGS) {
       return 'можно указать не более 5 хэштегов.';
     }
 
@@ -108,12 +117,12 @@ function initForm() {
         return 'хэштег должен начинаться с символа #.';
       }
 
-      if (tag.length === 1) {
+      if (tag.length === MIN_HASHTAG_LENGTH) {
         return 'хэштег не может состоять только из символа #.';
       }
 
-      if (tag.length > 20) {
-        return 'длина хэштега не должна превышать 20 символов (включая #).';
+      if (tag.length > MAX_HASHTAG_LENGTH) {
+        return `длина хэштега не должна превышать ${MAX_HASHTAG_LENGTH} символов (включая #).`;
       }
 
       const content = tag.slice(1);
@@ -129,15 +138,15 @@ function initForm() {
   pristine.addValidator(hashtagsInput, validateHashtags, getHashtagErrorMessage);
   pristine.addValidator(
     commentInput,
-    (value) => value.length <= 140,
-    'максимум 140 символов'
+    (value) => value.length <= MAX_COMMENT_LENGTH,
+    `максимум ${MAX_COMMENT_LENGTH} символов`
   );
 
   /* ---------- масштаб ---------- */
 
   // установка масштаба изображения
   function setScale(scale) {
-    currentScale = Math.max(25, Math.min(100, scale));
+    currentScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, scale));
     imgUploadPreview.style.transform = `scale(${currentScale / 100})`;
     scaleControlValue.value = `${currentScale}%`;
   }
@@ -237,7 +246,7 @@ function initForm() {
   function resetForm() {
     form.reset();
     pristine.reset();
-    setScale(100);
+    setScale(MAX_SCALE);
     resetEffect();
     if (uploadInput) {
       uploadInput.value = '';
@@ -255,53 +264,6 @@ function initForm() {
   function openForm() {
     uploadOverlay.classList.remove('hidden');
     body.classList.add('modal-open');
-  }
-
-  // отображение модального сообщения
-  function showMessage(templateId) {
-    const template = document.querySelector(templateId);
-    if (!template) {
-      return;
-    }
-
-    const fragment = template.content.cloneNode(true);
-    const message = fragment.firstElementChild;
-    document.body.append(message);
-
-    // поднятие сообщения выше формы (z-index формы = 2)
-    message.style.zIndex = '3';
-
-    // поиск внутреннего блока и кнопки закрытия
-    const inner = message.querySelector('.success__inner, .error__inner');
-    const button = message.querySelector('.success__button, .error__button');
-
-    // очистка обработчиков при закрытии
-    const cleanup = () => {
-      message.removeEventListener('click', onClickOutside);
-      if (button) {
-        button.removeEventListener('click', onClickButton);
-      }
-    };
-
-    // закрытие по клику вне контента сообщения
-    const onClickOutside = (evt) => {
-      if (inner && !evt.target.closest(`.${inner.className}`)) {
-        cleanup();
-        message.remove();
-      }
-    };
-
-    // закрытие по клику на кнопку
-    const onClickButton = () => {
-      cleanup();
-      message.remove();
-    };
-
-    if (button) {
-      button.addEventListener('click', onClickButton);
-    }
-
-    message.addEventListener('click', onClickOutside);
   }
 
   /* ---------- отправка ---------- */
@@ -341,14 +303,14 @@ function initForm() {
   form.addEventListener('submit', onFormSubmit);
 
   // изменение масштаба
-  scaleControlSmaller.addEventListener('click', () => setScale(currentScale - 25));
-  scaleControlBigger.addEventListener('click', () => setScale(currentScale + 25));
+  scaleControlSmaller.addEventListener('click', () => setScale(currentScale - SCALE_STEP));
+  scaleControlBigger.addEventListener('click', () => setScale(currentScale + SCALE_STEP));
 
   // выбор эффекта
   effectsList.addEventListener('change', onEffectChange);
 
   // инициализация масштаба и эффекта
-  setScale(100);
+  setScale(MAX_SCALE);
   resetEffect();
 }
 
@@ -358,6 +320,21 @@ document.addEventListener('DOMContentLoaded', initForm);
 // единый обработчик esc для всех модальных окон
 document.addEventListener('keydown', (evt) => {
   if (!isEscapeKey(evt)) {
+    return;
+  }
+
+  // получаем элемент, который сейчас в фокусе
+  const activeElement = document.activeElement;
+
+  // проверяем, находится ли фокус в полях ввода хэштегов или комментария
+  const hashtagsInput = document.querySelector('.text__hashtags');
+  const commentInput = document.querySelector('.text__description');
+
+  if (
+    activeElement === hashtagsInput ||
+    activeElement === commentInput
+  ) {
+    // если фокус в одном из этих полей — ничего не делаем, форма не закрывается
     return;
   }
 
@@ -374,7 +351,7 @@ document.addEventListener('keydown', (evt) => {
     return;
   }
 
-  // закрытие формы редактирования
+  // закрытие формы редактирования (если фокус НЕ в полях ввода)
   const overlay = document.querySelector('.img-upload__overlay:not(.hidden)');
   if (overlay) {
     evt.preventDefault();

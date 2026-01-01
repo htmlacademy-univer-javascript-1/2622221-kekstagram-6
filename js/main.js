@@ -2,7 +2,7 @@
 import { loadPhotos } from './api.js';
 import { renderThumbnails } from './thumbnail.js';
 import { initFilters } from './filters.js';
-import './form-validation.js';
+import './upload-form.js';
 
 const showLoadError = () => {
   const errorBlock = document.createElement('div');
