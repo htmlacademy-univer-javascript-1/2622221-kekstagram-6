@@ -1,5 +1,8 @@
 import { debounce } from './util.js';
 
+const RANDOM_PHOTO_COUNT = 10;
+const DEBOUNCE_DELAY = 500;
+
 const filtersContainer = document.querySelector('.img-filters');
 const filterButtons = filtersContainer.querySelectorAll('.img-filters__button');
 
@@ -10,7 +13,7 @@ const sortByComments = (a, b) => b.comments.length - a.comments.length;
 const getFilteredPhotos = (photos, filterType) => {
   switch (filterType) {
     case 'filter-random':
-      return [...photos].sort(() => Math.random() - 0.5).slice(0, 10);
+      return [...photos].sort(() => Math.random() - 0.5).slice(0, RANDOM_PHOTO_COUNT);
     case 'filter-discussed':
       return [...photos].sort(sortByComments);
     default:
@@ -23,7 +26,7 @@ const initFilters = (photos, renderThumbnails) => {
 
   const debouncedRender = debounce((filterType) => {
     renderThumbnails(getFilteredPhotos(photos, filterType));
-  }, 500);
+  }, DEBOUNCE_DELAY);
 
   filtersContainer.addEventListener('click', (evt) => {
     const button = evt.target.closest('.img-filters__button');
