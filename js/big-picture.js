@@ -1,13 +1,13 @@
 import { isEscapeKey } from './util.js';
 
+const COMMENTS_PER_PORTION = 5;
+
 const bigPicture = document.querySelector('.big-picture');
 const closeButton = bigPicture.querySelector('.big-picture__cancel');
 const commentsList = bigPicture.querySelector('.social__comments');
 const commentsCount = bigPicture.querySelector('.social__comment-count');
 const commentsLoader = bigPicture.querySelector('.comments-loader');
 const body = document.body;
-
-const COMMENTS_PER_PORTION = 5;
 
 let currentComments = [];
 let commentsShown = 0;
